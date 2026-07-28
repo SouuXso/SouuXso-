@@ -1,0 +1,28 @@
+{
+  "menus": [
+    {
+      "id": "tools",
+      "label": "🔧 Tools",
+      "file": "tools.php",
+      "active": true
+    },
+    {
+      "id": "noapikey",
+      "label": "🚫 No API Key",
+      "file": "noapikey.php",
+      "active": true
+    },
+    {
+      "id": "apikey",
+      "label": "🔑 API Key",
+      "file": "apikey.php",
+      "active": true
+    },
+    {
+      "id": "telegram",
+      "label": "📱 Telegram",
+      "file": "telegram.php",
+      "active": true
+    }
+  ]
+}
