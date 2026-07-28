@@ -4,7 +4,7 @@ $config = json_decode(file_get_contents('config.json'), true);
 $menuData = json_decode(file_get_contents('menu.json'), true);
 $menus = array_filter($menuData['menus'], fn($m) => $m['active'] === true);
 
-// ============ BANNER & LOADER (dari kode kamu) ============
+// ============ BANNER & LOADER (gradient hijau) ============
 function colorizeMultiGradient(string $text, int $lineIdx, int $totalLines, array $palette, int $refWidth, float $offset = 0.0): string {
     $chars = mb_str_split($text);
     $output = "";
@@ -36,46 +36,49 @@ function getBannerFrame($topHeader, $bottomFooter, $offset) {
     $BOLD    = "\033[1m";
     $RESET   = "\033[0m";
 
-    $artBlock = [
-        "██████╗  █████╗ ██████╗ ██╗  ██╗██████╗ ██╗   ██╗████████╗███████╗███████╗",
-        "██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝██╔══██╗╚██╗ ██╔╝╚══██╔══╝██╔════╝██╔════╝",
-        "██║  ██║███████║██████╔╝█████═╝ ██████╔╝ ╚████╔╝    ██║   █████╗  ███████╗",
-        "██║  ██║██╔══██║██████╔╝██╔═██╗ ██╔══██╗  ╚██╔╝     ██║   ██╔══╝  ╚════██║",
-        "██████╔╝██║  ██║██║  ██║██║  ██╗██████╔╝   ██║      ██║   ███████╗███████║",
-        "╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝    ╚═╝      ╚═╝   ╚══════╝╚══════╝"
+    // Banner teks "ScriptyXSouu" dengan gaya block sederhana (1 line)
+    // Biar tetap multi-line, kita split jadi beberapa baris untuk efek gradient vertikal
+    $bannerText = [
+        "  ███████╗ ██████╗██████╗ ██╗██████╗ ████████╗██╗   ██╗██╗  ██╗███████╗ ██████╗ ██████╗ ██╗   ██╗██╗   ██╗",
+        "  ██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝╚██╗ ██╔╝██║  ██║██╔════╝██╔═══██╗██╔══██╗╚██╗ ██╔╝╚██╗ ██╔╝",
+        "  ███████╗██║     ██████╔╝██║██████╔╝   ██║    ╚████╔╝ ███████║█████╗  ██║   ██║██████╔╝ ╚████╔╝  ╚████╔╝ ",
+        "  ╚════██║██║     ██╔══██╗██║██╔══██╗   ██║     ╚██╔╝  ██╔══██║██╔══╝  ██║   ██║██╔══██╗  ╚██╔╝    ╚██╔╝  ",
+        "  ███████║╚██████╗██║  ██║██║██║  ██║   ██║      ██║   ██║  ██║███████╗╚██████╔╝██║  ██║   ██║      ██║   ",
+        "  ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝      ╚═╝   "
     ];
 
-    $cyberDrift = [
-        [0, 242, 254],   // Electric Cyan
-        [79, 109, 255],  // Cobalt Blue
-        [157, 78, 221],  // Electric Purple
-        [255, 0, 110]    // Neon Pink
+    // Palette hijau (dark green → lime → bright green → light green)
+    $greenPalette = [
+        [0, 100, 0],    // dark green
+        [50, 205, 50],  // lime green
+        [0, 255, 0],    // pure green
+        [144, 238, 144] // light green
     ];
 
-    $artLen = mb_strlen($artBlock[0]);
+    $artLen = mb_strlen($bannerText[0]);
     $out = "\n";
     $out .= " " . $C_GRAY . "──[ " . $C_GREEN . "● ONLINE " . $C_GRAY . "]──[" . $C_PINK . $topHeader . $C_GRAY . "]───────────────────────────────────────────────" . $RESET . "\033[K\n\n";
-    $totalLines = count($artBlock);
-    foreach ($artBlock as $idx => $line) {
-        $coloredLine = colorizeMultiGradient($line, $idx, $totalLines, $cyberDrift, $artLen, $offset);
+    $totalLines = count($bannerText);
+    foreach ($bannerText as $idx => $line) {
+        $coloredLine = colorizeMultiGradient($line, $idx, $totalLines, $greenPalette, $artLen, $offset);
         $out .= " " . $coloredLine . "\033[K\n";
     }
     $out .= "\n";
-    $gradientDivider = colorizeMultiGradient(str_repeat("─", 74), 0, 1, $cyberDrift, $artLen, $offset);
+    $gradientDivider = colorizeMultiGradient(str_repeat("─", 74), 0, 1, $greenPalette, $artLen, $offset);
     $out .= " " . $gradientDivider . "\033[K\n\n";
     $out .= "\n " . $C_GRAY . "──[ " . $C_PINK . $bottomFooter . $C_GRAY . " ]─────────────────────────────────────────────────" . $RESET . "\033[K\n";
     return $out;
 }
 
 function showSpinner($message, $duration = 1.5) {
-    $CYAN = "\033[38;2;139;233;253m";
+    $GREEN = "\033[38;2;80;250;123m";
     $BOLD = "\033[1m";
     $RESET = "\033[0m";
     $spinner = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
     $start = microtime(true);
     $i = 0;
     while (microtime(true) - $start < $duration) {
-        echo "\r\033[K{$BOLD}{$CYAN}{$message}{$RESET} {$spinner[$i % count($spinner)]}";
+        echo "\r\033[K{$BOLD}{$GREEN}{$message}{$RESET} {$spinner[$i % count($spinner)]}";
         $i++;
         usleep(80000);
     }
@@ -83,14 +86,14 @@ function showSpinner($message, $duration = 1.5) {
 }
 
 function loadingDots($message, $duration = 1.5) {
-    $CYAN = "\033[38;2;139;233;253m";
+    $GREEN = "\033[38;2;80;250;123m";
     $BOLD = "\033[1m";
     $RESET = "\033[0m";
     $start = microtime(true);
     $dots = 0;
     while (microtime(true) - $start < $duration) {
         $dot_str = str_repeat('.', ($dots % 4) + 1);
-        echo "\r\033[K{$BOLD}{$CYAN}{$message}{$RESET}{$dot_str}";
+        echo "\r\033[K{$BOLD}{$GREEN}{$message}{$RESET}{$dot_str}";
         $dots++;
         usleep(300000);
     }
@@ -104,14 +107,13 @@ if (!in_array($page, $validPages)) {
     $page = 'tools';
 }
 
-// cari file
 $menuItem = array_filter($menus, fn($m) => $m['id'] === $page);
 $menuItem = reset($menuItem);
 $filePath = __DIR__ . '/pages/' . ($menuItem['file'] ?? 'tools.php');
 
 // ============ TAMPILKAN BANNER ============
 echo getBannerFrame(
-    $config['app_name'] . ' v' . $config['version'],
+    'ScriptyXSouu Panel v' . $config['version'],
     'Menu: ' . implode(' | ', array_column($menus, 'label')),
     time() % 100 / 100
 );
